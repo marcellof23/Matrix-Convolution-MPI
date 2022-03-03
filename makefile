@@ -29,13 +29,13 @@ build-run: build run
 
 
 #Tests
-test-build: ./src/test.c
-	mpicc -o ./bin/test.out ./src/test.c --openmp
+test-build: ./src/checker.c
+	gcc ./src/checker.c -o ./bin/checker
 
-test-run: ./bin/test.out
-	mpiexec -n 6 ./bin/test.out
+test-run: ./bin/checker
+	./bin/checker
 
-test: test-build test-run
+check: test-build test-run
 
 clean:  
 	rm src/*.out
