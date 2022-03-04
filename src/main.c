@@ -4,9 +4,10 @@
 #include "matrix.h"
 
 int main(int argc, char *argv[]){
-  double time_spent = 0.0;
+  struct timespec start, finish;
+  double elapsed;
  
-  clock_t begin = clock();
+  clock_gettime(CLOCK_MONOTONIC, &start);
 
 
   int kernel_row, kernel_col, target_row, target_col, num_targets;
@@ -35,8 +36,9 @@ int main(int argc, char *argv[]){
 	int median = get_median(arr_range, num_targets);	
 	int floored_mean = get_floored_mean(arr_range, num_targets); 
 
-	clock_t end = clock();
-  time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+  clock_gettime(CLOCK_MONOTONIC, &finish);
+  elapsed = (finish.tv_sec - start.tv_sec);
+  elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
 
   // stores the output in result/<tc_name>_<serial/parallel>.txt
   if(argc > 1){
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]){
 			median, 
 			floored_mean);
 
-  printf("The elapsed time is %f seconds\n", time_spent);
+  printf("The elapsed time is %f seconds\n", elapsed);
 
 	return 0;
 }
