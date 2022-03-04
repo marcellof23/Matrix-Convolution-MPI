@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "matrix.h"
+#include "utils.h"
 
 int main(int argc, char *argv[]){
   struct timespec start, finish;

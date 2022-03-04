@@ -16,7 +16,7 @@ baseline-test: ./bin/serial.out
 
 #Actual Programs
 build: ./src/main.c
-	mpicc -o ./bin/main.out ./src/matrix.c ./src/main.c --openmp
+	mpicc -o ./bin/main.out ./src/matrix.c ./src/utils.c ./src/main.c --openmp
 
 run: ./bin/main.out
 	cat tests/test1 | ./bin/main.out test1
