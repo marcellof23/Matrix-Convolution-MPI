@@ -34,4 +34,5 @@
 
 #Additions
 .vscode
-bin
+bin/*
+!bin/.gitkeep

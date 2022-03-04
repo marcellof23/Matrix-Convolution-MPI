@@ -1,6 +1,6 @@
 #Baselines
-baseline-build: ./src/serial.c
-	gcc ./src/serial.c -lm -o ./bin/serial.out
+baseline-build: ./baseline/serial.c
+	gcc ./baseline/serial.c -lm -o ./bin/serial.out
 
 baseline-run: ./bin/serial.out
 	cat tests/test1 | ./bin/serial.out
@@ -30,13 +30,12 @@ build-run: build run
 
 #Tests
 test-build: ./src/checker.c
-	gcc ./src/checker.c -o ./bin/checker
+	gcc ./src/checker.c -o ./bin/checker.out
 
-test-run: ./bin/checker
-	./bin/checker
+test-run: ./bin/checker.out
+	./bin/checker.out
 
 check: test-build test-run
 
 clean:  
-	rm src/*.out
-	rm bin/*.out
+	rm src/*.out & rm bin/*.out
