@@ -136,17 +136,17 @@ int main(int argc, char *argv[]){
         get_timer();
 
         /* stores the output in result/<tc_name>_<serial/parallel>.txt */
-        // if(argc > 1){
-        //   FILE *outfile;
-        //   char filename[80];
-        //   sprintf(filename, "result/%s_parallel.txt", argv[1]);
-        //   outfile = fopen(filename, "w");
-        //   fprintf(outfile,"%d\n%d\n%d\n%d\n", 
-        //   arr_range[0], 
-        //   arr_range[num_targets - 1], 
-        //   median, 
-        //   floored_mean);
-        // }
+        if(argc > 1){
+          FILE *outfile;
+          char filename[80];
+          sprintf(filename, "result/%s_parallel.txt", argv[1]);
+          outfile = fopen(filename, "w");
+          fprintf(outfile,"%d\n%d\n%d\n%d\n", 
+          arr_range[0], 
+          arr_range[num_targets - 1], 
+          median, 
+          floored_mean);
+        }
 
 
         printf("%d\n%d\n%d\n%d\n", 
