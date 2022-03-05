@@ -43,7 +43,7 @@ int get_matrix_datarange(Matrix *m) {
 	int smax = DATAMIN;
 	int smin = DATAMAX;
 
-  #pragma omp parallel for reduction(max:smax) reduction(min:smin) num_threads(THREADS_COUNT) 
+  #pragma omp parallel for reduction(max:smax) reduction(min:smin) 
   for (int i = 0; i < m->row_eff; i++) {
     for (int j = 0; j < m->col_eff; j++) {
       int el = m->mat[i][j];
@@ -76,7 +76,7 @@ Matrix convolution(Matrix *kernel, Matrix *target) {
 	
 	init_matrix(&out, out_row_eff, out_col_eff);
 
-  #pragma omp parallel for num_threads(THREADS_COUNT)
+  #pragma omp parallel for
   for (int i = 0; i < out.row_eff; i++) {
     for (int j = 0; j < out.col_eff; j++) {
       out.mat[i][j] = supression_op(kernel, target, i, j);
