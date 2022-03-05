@@ -104,8 +104,6 @@ int main(int argc, char *argv[]){
         assert(final_arr_range != NULL);
     }
 
-    MPI_Barrier(MPI_COMM_WORLD);
-
     MPI_Gatherv(sub_arr_range, send_counts[world_rank], MPI_INT, final_arr_range, send_counts, displacements, MPI_INT, BROADCASTER_RANK, MPI_COMM_WORLD);
 
     if(world_rank == BROADCASTER_RANK){
