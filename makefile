@@ -19,7 +19,7 @@ build: ./src/main.c ./src/matrix.c ./src/utils.c ./src/helper.c
 	mpicc -o ./bin/main.out ./src/matrix.c ./src/utils.c ./src/helper.c ./src/main.c --openmp
 
 run: ./bin/main.out
-	cat tests/test1 | mpirun -n 4 ./bin/main.out test1
+	cat tests/test1 | mpirun -n 2 ./bin/main.out test1
 	cat tests/K02-01-TC1 | mpirun -n 4 ./bin/main.out K02-01-TC1
 	cat tests/K02-01-TC2 | mpirun -n 4 ./bin/main.out K02-01-TC2
 	cat tests/K02-01-TC3 | mpirun -n 4 ./bin/main.out K02-01-TC3

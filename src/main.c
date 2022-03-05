@@ -75,19 +75,6 @@ int main(int argc, char *argv[]){
             displacements[i] = offset;
             offset+=send_counts[i];
         }
-        
-        /* read each target matrix, compute their convolution matrices, and compute their data ranges */
-        // for (int i = 0; i < num_targets; i++) {
-        //   arr_mat[i] = input_matrix(target_row, target_col);
-        //   arr_mat[i] = convolution(&kernel_matrix, &arr_mat[i]);
-        //   arr_range[i] = get_matrix_datarange(&arr_mat[i]); 
-        // }
-
-        /* sort the data range array */
-        // merge_sort(arr_range, 0, num_targets - 1);
-        
-        // median = get_median(arr_range, num_targets);	
-        // floored_mean = get_floored_mean(arr_range, num_targets); 
     }
 
     debug(world_rank, "hello (p = %d)\n", world_size);
@@ -111,7 +98,6 @@ int main(int argc, char *argv[]){
 
     Matrix *sub_arr_mat = (Matrix *)malloc(send_counts[world_rank] * sizeof(Matrix));
     int *sub_arr_range = malloc(send_counts[world_rank] * sizeof(int));
-    int sub_median, sub_floored_mean;
 
     MPI_Scatterv(arr_mat, send_counts, displacements, MPI_MATRIX, sub_arr_mat, send_counts[world_rank], MPI_MATRIX, BROADCASTER_RANK, MPI_COMM_WORLD);
 
@@ -123,19 +109,30 @@ int main(int argc, char *argv[]){
         sub_arr_range[i] = get_matrix_datarange(&sub_arr_mat[i]); 
     }
 
-    sub_median = get_median(sub_arr_range, send_counts[world_rank]);
-    sub_floored_mean = get_floored_mean(sub_arr_range, send_counts[world_rank]); 
+    merge_sort(sub_arr_range, 0, send_counts[world_rank] - 1);
 
-    debug(world_rank, "Median %d Floored Mean %d\n",sub_median, sub_floored_mean);
+    int *final_arr_range;
+    if(world_rank == BROADCASTER_RANK){
+        final_arr_range = (int*)malloc(num_targets * sizeof(int));
+        assert(final_arr_range != NULL);
+    }
 
-    debug(world_rank, "goodbye \n");
+    MPI_Barrier(MPI_COMM_WORLD);
 
-    int *sub_avg;
+    MPI_Gatherv(sub_arr_range, send_counts[world_rank], MPI_INT, final_arr_range, send_counts, displacements, MPI_INT, BROADCASTER_RANK, MPI_COMM_WORLD);
 
+    if(world_rank == BROADCASTER_RANK){
+        for(int i = 0 ; i < num_targets; i++){
+            debug(world_rank, "sub avg[%d] : %d\n", i, final_arr_range[i]);
+        }
+        merge_sort(final_arr_range, 0, num_targets - 1);
+        median = get_median(final_arr_range, num_targets);
+        floored_mean = get_floored_mean(final_arr_range, num_targets); 
+    }
 
     MPI_Finalize();
 
-    if(world_rank == 0){
+    if(world_rank == BROADCASTER_RANK){
         get_timer();
 
         /* stores the output in result/<tc_name>_<serial/parallel>.txt */
@@ -152,15 +149,16 @@ int main(int argc, char *argv[]){
         // }
 
 
-        // printf("%d\n%d\n%d\n%d\n", 
-        // 		arr_range[0], 
-        // 		arr_range[num_targets - 1], 
-        // 		median, 
-        // 		floored_mean);
+        printf("%d\n%d\n%d\n%d\n", 
+        		final_arr_range[0], 
+        		final_arr_range[num_targets - 1], 
+        		median, 
+        		floored_mean);
         printf("The elapsed time is %f seconds\n", elapsed);
 
         free(arr_mat);
         free(arr_range);
+        free(final_arr_range);
     }
 
     return 0;
