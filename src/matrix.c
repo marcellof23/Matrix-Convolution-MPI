@@ -17,7 +17,7 @@ Matrix input_matrix(int nrow, int ncol) {
 	Matrix input;
 	init_matrix(&input, nrow, ncol);
 
-  int i, j;
+    int i, j;
 
 	for (i = 0; i < nrow; i++) {
     for (j = 0; j < ncol; j++) {

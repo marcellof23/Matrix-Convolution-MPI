@@ -1,6 +1,8 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#define BROADCASTER_RANK 0
+
 struct timespec start, current;
 double elapsed;
 
