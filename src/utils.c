@@ -65,5 +65,5 @@ long get_floored_mean(int *n, int length) {
 		sum += n[i];
 	}
 
-	return sum / length;
+	return length > 0 ? sum / length : 0;
 }
