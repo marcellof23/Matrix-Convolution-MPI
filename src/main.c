@@ -13,7 +13,6 @@ int main(int argc, char *argv[]){
     /* Master MPI Variables */
     Matrix kernel_matrix;
     Matrix *arr_mat;
-    int *arr_range;
     int median, floored_mean;
 
     int *send_counts; /* The number of chunk every process receives */
@@ -53,9 +52,7 @@ int main(int argc, char *argv[]){
 
         scanf("%d %d %d", &num_targets, &target_row, &target_col);
         arr_mat = (Matrix*)malloc(num_targets * sizeof(Matrix));
-        arr_range = (int*)malloc(num_targets * sizeof(int));
         assert(arr_mat != NULL);
-        assert(arr_range != NULL);
 
         /* read each target matrix */
         for(int i = 0; i < num_targets; i++){
@@ -77,20 +74,12 @@ int main(int argc, char *argv[]){
         }
     }
 
-    debug(world_rank, "hello (p = %d)\n", world_size);
 
     MPI_Bcast(&kernel_matrix, 1, MPI_MATRIX, BROADCASTER_RANK, MPI_COMM_WORLD);
     MPI_Bcast(send_counts, world_size, MPI_INT, BROADCASTER_RANK, MPI_COMM_WORLD);
     MPI_Bcast(displacements, world_size, MPI_INT, BROADCASTER_RANK, MPI_COMM_WORLD);
 
-    if(world_rank != BROADCASTER_RANK) {
-        debug(world_rank, "received kernel matrix from %d\n", BROADCASTER_RANK);
-        debug(world_rank, "kernel matrix size %d %d\n", kernel_matrix.row_eff, kernel_matrix.col_eff);
-    }
-
     MPI_Barrier(MPI_COMM_WORLD);
-
-    debug(world_rank, "num chunks %d\n", send_counts[world_rank]);
 
     if(send_counts[world_rank] == 0){
         return 0;
@@ -100,8 +89,6 @@ int main(int argc, char *argv[]){
     int *sub_arr_range = malloc(send_counts[world_rank] * sizeof(int));
 
     MPI_Scatterv(arr_mat, send_counts, displacements, MPI_MATRIX, sub_arr_mat, send_counts[world_rank], MPI_MATRIX, BROADCASTER_RANK, MPI_COMM_WORLD);
-
-    debug(world_rank, "input matrix size [%d][%d]\n", sub_arr_mat[0].col_eff, sub_arr_mat[0].row_eff);
 
     /*  compute their convolution matrices, and compute their data ranges */
     for(int i = 0; i < send_counts[world_rank]; i++){
@@ -122,9 +109,6 @@ int main(int argc, char *argv[]){
     MPI_Gatherv(sub_arr_range, send_counts[world_rank], MPI_INT, final_arr_range, send_counts, displacements, MPI_INT, BROADCASTER_RANK, MPI_COMM_WORLD);
 
     if(world_rank == BROADCASTER_RANK){
-        for(int i = 0 ; i < num_targets; i++){
-            debug(world_rank, "sub avg[%d] : %d\n", i, final_arr_range[i]);
-        }
         merge_sort(final_arr_range, 0, num_targets - 1);
         median = get_median(final_arr_range, num_targets);
         floored_mean = get_floored_mean(final_arr_range, num_targets); 
@@ -142,8 +126,8 @@ int main(int argc, char *argv[]){
           sprintf(filename, "result/%s_parallel.txt", argv[1]);
           outfile = fopen(filename, "w");
           fprintf(outfile,"%d\n%d\n%d\n%d\n", 
-          arr_range[0], 
-          arr_range[num_targets - 1], 
+          final_arr_range[0], 
+          final_arr_range[num_targets - 1], 
           median, 
           floored_mean);
         }
@@ -157,7 +141,6 @@ int main(int argc, char *argv[]){
         printf("The elapsed time is %f seconds\n", elapsed);
 
         free(arr_mat);
-        free(arr_range);
         free(final_arr_range);
     }
 
