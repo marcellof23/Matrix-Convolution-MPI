@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdarg.h>
-#include <time.h>
 #include "utils.h"
 
 void merge_array(int *n, int left, int mid, int right) {
@@ -68,17 +66,4 @@ long get_floored_mean(int *n, int length) {
 	}
 
 	return sum / length;
-}
-
-void debug(int rank, char *format, ...)
-{
-  va_list args; /* Variable argument list */
-
-  va_start(args, format);
-
-  printf("%ld|%2d|", time(NULL), rank);
-  vprintf(format, args);
-
-  /* Clean up variable argument list */
-  va_end(args);
 }
