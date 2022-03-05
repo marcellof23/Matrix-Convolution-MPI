@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdarg.h>
+#include <time.h>
 #include "utils.h"
 
 void merge_array(int *n, int left, int mid, int right) {
@@ -74,7 +76,7 @@ void debug(int rank, char *format, ...)
 
   va_start(args, format);
 
-  printf("%12.6f|%2d|", get_timer(), rank);
+  printf("%ld|%2d|", time(NULL), rank);
   vprintf(format, args);
 
   /* Clean up variable argument list */
