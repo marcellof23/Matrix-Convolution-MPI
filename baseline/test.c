@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
 	int name_len;
 	MPI_Get_processor_name(processor_name, &name_len);
 
-  printf("%d", omp_get_num_threads());
+  printf("%d\n", omp_get_num_threads());
 
 
 	#pragma omp parallel num_threads(8)

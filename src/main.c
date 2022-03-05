@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <mpi.h>
 #include "matrix.h"
 #include "utils.h"
 
 int main(int argc, char *argv[]){
   struct timespec start, finish;
   double elapsed;
+  int kernel_row, kernel_col, target_row, target_col, num_targets;
+  int num_procs, rank;
  
   clock_gettime(CLOCK_MONOTONIC, &start);
 
-
-  int kernel_row, kernel_col, target_row, target_col, num_targets;
+  MPI_Init(&argc, &argv);
+  MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	
 	// reads kernel's row and column and initalize kernel matrix from input
 	scanf("%d %d", &kernel_row, &kernel_col);
@@ -36,6 +40,9 @@ int main(int argc, char *argv[]){
 	
 	int median = get_median(arr_range, num_targets);	
 	int floored_mean = get_floored_mean(arr_range, num_targets); 
+
+
+  MPI_Finalize();
 
   clock_gettime(CLOCK_MONOTONIC, &finish);
   elapsed = (finish.tv_sec - start.tv_sec);

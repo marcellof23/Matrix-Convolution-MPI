@@ -67,3 +67,16 @@ long get_floored_mean(int *n, int length) {
 
 	return sum / length;
 }
+
+void debug(int rank, char *format, ...)
+{
+  va_list args; /* Variable argument list */
+
+  va_start(args, format);
+
+  printf("%12.6f|%2d|", get_timer(), rank);
+  vprintf(format, args);
+
+  /* Clean up variable argument list */
+  va_end(args);
+}
