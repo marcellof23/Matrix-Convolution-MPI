@@ -122,4 +122,6 @@ OpenMP memengaruhi waktu eksekusi program kami dengan menjalankan sebuah blok ko
 
 OpenMPI memengaruhi waktu eksekusi program kami dengan membagi data yang dieksekusi program ke beberapa mesin yang independen untuk dieksekusi secara paralel.
 
+Perlu diperhatikan bahwa pasti data yang dikumpulkan bisa tidak sesuai dengan teori karena poin terakhir yang saya sebutkan pada analisis di awal readme karena banyak sekali parameter lain yang bermain di hasil percobaan. Mungkin bisa dibantah dengan argumen bahwa CPU bisa di-limit untuk setiap mahasiswa yang melakukan ssh ke mesin tetapi perlu dicatat bahwa limit ini sifatnya logical pada OS dan bukan hardware.
+
 ---
