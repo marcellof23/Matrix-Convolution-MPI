@@ -24,7 +24,63 @@ asdfasdf
 ------------------------------------------
 ## 4. **Variasikan jumlah node OpenMPI yang berpartisipasi dan jumlah thread OpenMP yang digunakan. Gunakan percobaan-percobaan dengan parameter berikut**
 
-```
-asdfasdf
-```
+
+## Serial 
+| TC | Time Required |
+| :---: | :---: | 
+| TC1 | 0.052763 seconds |
+| TC2 | 15.735753 second |
+| TC3 | 12.245259 seconds |
+| TC4 | 141.187519 seconds |
+
+## Paralel 
+
+2 Core 5 Threads
+| Test Case | Time Required |
+| :---: | :---: | 
+| TC1 | 1.634647 seconds |
+| TC2 | 4.471616 seconds |
+| TC3 | 11.722067 seconds|
+| TC4 | 105.991456 seconds |
+
+2 Core 16 Threads 
+| Test Case | Time Required |
+| :---: | :---: | 
+| TC1 | 1.456144 seconds |
+| TC2 | 6.971852 seconds |
+| TC3 | 8.999443 seconds |
+| TC4 | 101.482686 seconds |
+
+3 Core 5 Threads
+| Test Case | Time Required |
+| :---: | :---: | 
+| TC1 | 0.961302 seconds |
+| TC2 | 5.381746 seconds |
+| TC3 | 7.235308 seconds |
+| TC4 | 81.494726 seconds |
+
+3 Core 16 Threads
+| Test Case | Time Required |
+| :---: | :---: | 
+| TC1 | 0.060532 seconds |
+| TC2 | 7.445019 seconds |
+| TC3 | 10.003477 seconds |
+| TC4 | 104.910649 seconds |
+
+4 Core 5 Threads
+| Test Case | Time Required |
+| :---: | :---: | 
+| TC1 | 3.255436 seconds |
+| TC2 | 18.435459 seconds |
+| TC3 | 27.155610 seconds |
+| TC4 | 207.701387 seconds |
+
+4 Core 16 Threads
+
+| Test Case | Time Required |
+| :---: | :---: | 
+| TC1 | 4.887166 seconds|
+| TC2 | 13.892496 seconds |
+| TC3 | 29.490713 seconds |
+| TC4 | 235.384670 seconds |
 ------------------------------------------
