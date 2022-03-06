@@ -12,18 +12,36 @@ Pada potongan program selanjutnya, dilakukan perhitungan matrix konvolusi dan da
 ------------------------------------------
 ## 2. **Dari waktu eksekusi terbaik program paralel Anda, bandingkan dengan waktu eksekusi program sekuensial yang diberikan. Analisis mengapa waktu eksekusi program Anda bisa lebih lambat / lebih cepat / sama saja.**
 
-```
-asdfasdf
-```
+### Serial 
+| TC | Time Required |
+| :---: | :---: | 
+| TC1 | 0.052763 seconds |
+| TC2 | 15.735753 second |
+| TC3 | 12.245259 seconds |
+| TC4 | 141.187519 seconds |
+
+### Paralel dengan Waktu Eksekusi Terbaik
+
+#### 3 Core 5 Threads
+
+| Test Case | Time Required |
+| :---: | :---: | 
+| TC1 | 0.961302 seconds |
+| TC2 | 5.381746 seconds |
+| TC3 | 7.235308 seconds |
+| TC4 | 81.494726 seconds |
+
+### Analisis
+
+Waktu eksekusi terbaik yang kami peroleh melalui implementasi parallel computing memberikan hasil yang lebih cepat daripada implementasi serial, hal ini karena adanya proses paralelisasi terhadap input matriks yang diberikan sehingga setiap pemrosesan konvolusi dan pencarian selisih nilai terbesar dan terkecil dala matriks hasil konvolusi dapat dilakukan secara serentak sehingga tidak terjadi "antrian" pemrosesan yang panjang akibat pemrosesan matriks yang serial, mengingat setiap proses yang di-assign untuk memproses matriks saling independen dan tidak memengaruhi jalannya proses lain.
+
 ------------------------------------------
 ## 3. **Jelaskan secara singkat apakah ada perbedaan antara hasil program serial dan program paralel Anda**
 
-```
-asdfasdf
-```
+Untuk hasil output program serial dan program paralel kami, tidak terdapat perbedaan sama sekali. Sehingga dapat disimpulkan bahwa algoritma perhitungan matriks konvolusi dan pencarian selisih nilai maksimum dan minimum dari elemen matriks dapat diimplementasikan secara paralel dan aman.
+
 ------------------------------------------
 ## 4. **Variasikan jumlah node OpenMPI yang berpartisipasi dan jumlah thread OpenMP yang digunakan. Gunakan percobaan-percobaan dengan parameter berikut**
-
 
 ## Serial 
 | TC | Time Required |
@@ -83,4 +101,13 @@ asdfasdf
 | TC2 | 13.892496 seconds |
 | TC3 | 29.490713 seconds |
 | TC4 | 235.384670 seconds |
+
+### Analisis
+
+Tampak dari waktu eksekusi yang ditampilkan diatas, terjadi pengurangan waktu eksekusi sampai pada percobaan dengan puncak eksekusi tercepat diperoleh dengan menggunakan 3 core dan 5 thread. Hal ini hampir sesuai dengan ekspektasi kami yaitu puncak eksekusi tercepat diperoleh dengan menggunakan 4 core dan 5 thread. Alasan mengapa kami mengekspektasikan bahwa puncak eksekusi tercepat diperoleh dengan menggunakan 4 core dan 5 thread adalah karena semakin banyak jumlah core dalam lingkungan yang ideal, waktu eksekusi akan semakin cepat hingga waktu eksekusi didominasi oleh network delay. Alasan mengapa menurut kami 4 core 5 thread lebih cepat daripada 4 core 16 thread adalah karena semakin banyak jumlah thread, maka semakin banyak pula context switching yang harus dilakukan oleh mesin apabile jumlah thread yang di-specify lebih besar dari derajat paralelisasi yang bisa dijalankan oleh mesin.
+
+OpenMP memengaruhi waktu eksekusi program kami dengan menjalankan sebuah blok kode dalam program kami ke dalam beberapa thread, sehingga blok kode tersebut bisa berjalan secara paralel sesuai dengan jumlah thread yang diberikan.
+
+OpenMPI memengaruhi waktu eksekusi program kami dengan membagi data yang dieksekusi program ke beberapa mesin yang independen untuk dieksekusi secara paralel.
+
 ------------------------------------------
