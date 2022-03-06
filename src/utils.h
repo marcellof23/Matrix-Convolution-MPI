@@ -41,4 +41,6 @@ int get_median(int *n, int length);
  * */
 long get_floored_mean(int *n, int length);
 
+void merge_k_sorted_arrays(int *send_counts, int k, int *unsorted_arr, int *sorted_arr, int num_targets);
+
 #endif

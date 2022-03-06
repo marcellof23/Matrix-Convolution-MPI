@@ -105,19 +105,30 @@ int main(int argc, char *argv[])
     merge_sort(sub_arr_range, 0, send_counts[world_rank] - 1);
 
     int *final_arr_range;
+    int *sorted_final_arr_range;
     if (world_rank == BROADCASTER_RANK)
     {
         final_arr_range = (int *)malloc(num_targets * sizeof(int));
         assert(final_arr_range != NULL);
+
+        sorted_final_arr_range = (int *)malloc(num_targets * sizeof(int));
+        assert(sorted_final_arr_range != NULL);
     }
 
     MPI_Gatherv(sub_arr_range, send_counts[world_rank], MPI_INT, final_arr_range, send_counts, displacements, MPI_INT, BROADCASTER_RANK, MPI_COMM_WORLD);
 
     if (world_rank == BROADCASTER_RANK)
     {
-        merge_sort(final_arr_range, 0, num_targets - 1);
-        median = get_median(final_arr_range, num_targets);
-        floored_mean = get_floored_mean(final_arr_range, num_targets);
+        // merge_sort(final_arr_range, 0, num_targets - 1);
+        // for(int i = 0 ; i < num_targets; i++){
+        //     debug(world_rank, "unsorted_arr[%d]: %d\n", i, final_arr_range[i]);
+        // }
+        merge_k_sorted_arrays(send_counts, world_size, final_arr_range, sorted_final_arr_range, num_targets);
+        // for(int i = 0 ; i < num_targets; i++){
+        //     debug(world_rank, "arr[%d]: %d\n", i, sorted_final_arr_range[i]);
+        // }
+        median = get_median(sorted_final_arr_range, num_targets);
+        floored_mean = get_floored_mean(sorted_final_arr_range, num_targets);
     }
 
     MPI_Finalize();
@@ -134,21 +145,22 @@ int main(int argc, char *argv[])
             sprintf(filename, "result/%s_parallel.txt", argv[1]);
             outfile = fopen(filename, "w");
             fprintf(outfile, "%d\n%d\n%d\n%d\n",
-                    final_arr_range[0],
-                    final_arr_range[num_targets - 1],
+                    sorted_final_arr_range[0],
+                    sorted_final_arr_range[num_targets - 1],
                     median,
                     floored_mean);
         }
 
         printf("%d\n%d\n%d\n%d\n",
-               final_arr_range[0],
-               final_arr_range[num_targets - 1],
+               sorted_final_arr_range[0],
+               sorted_final_arr_range[num_targets - 1],
                median,
                floored_mean);
         printf("The elapsed time is %f seconds\n", elapsed);
 
         free(arr_mat);
         free(final_arr_range);
+        free(sorted_final_arr_range);
     }
 
     return 0;
